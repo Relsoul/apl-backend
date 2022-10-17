@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      # Only will build development stage from our dockerfile
+    env_file:
+      - .env.production
+    # Run a command against the development stage of the image
+    command: npm run start:prod
+    depends_on:
+      - "mongodb"
+    ports:
+      - 7790:7790
+    links:
+      - "mongodb"
+  mongodb:
+    image: mongo:5.0.2
+    restart: unless-stopped
+    ports:
+      - 56674:27017
